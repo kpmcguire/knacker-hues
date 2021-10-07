@@ -55,22 +55,41 @@ export default {
     toggle_light_dark() {
       if(this.color_scheme == "dark") {
         this.color_scheme = "light"
+        this.change_color_scheme()
       } else {
         this.color_scheme = "dark"
+        this.change_color_scheme()
       }
-
+    },
+    change_color_scheme() {
+      const html_el = document.querySelector("html")
+      
+      if(this.color_scheme == "dark") {
+        console.log('dark')
+        html_el.classList.add("theme-dark")
+        html_el.classList.remove("theme-light")
+        this.color_scheme_label = "Switch to light mode"
+        this.color_scheme_icon = "🕶️"
+        
+      } else {
+        console.log('light')
+        html_el.classList.add("theme-light")
+        html_el.classList.remove("theme-dark")        
+        this.color_scheme_label = "Switch to dark mode" 
+        this.color_scheme_icon = "👓"
+      }
     }
   },
   created() {
     this.get_top_posts();
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       this.color_scheme = "dark"
+      this.change_color_scheme()
     } else {
       this.color_scheme = "light"
-    }
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-      this.color_scheme = e.matches ? "dark" : "light";
-    });
+      this.change_color_scheme()
+    }    
+
   },
   computed: {
     page_index_param() {
@@ -87,21 +106,7 @@ export default {
       this.start = this.page_index * this.per_page - this.per_page
       this.get_top_posts();
     },
-    color_scheme() {
-      const html_el = document.querySelector("html")
-      if(this.color_scheme == "dark") {
-        html_el.classList.add("theme-dark")
-        html_el.classList.remove("theme-light")
-        this.color_scheme_label = "Switch to light mode"
-        this.color_scheme_icon = "🕶️"
-        
-      } else {
-        html_el.classList.add("theme-light")
-        html_el.classList.remove("theme-dark")        
-        this.color_scheme_label = "Switch to dark mode" 
-        this.color_scheme_icon = "👓"
-      }
-    }
+
   }
 }
 </script>
