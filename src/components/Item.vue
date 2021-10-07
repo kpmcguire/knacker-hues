@@ -2,7 +2,12 @@
 .story-wrapper(v-if="story")
   h2.story-title
     a(:href="story.url" target="_blank") {{story.title}}
-  p.story-info(v-if="story.time") {{story.by}} – {{formatTimeAgo(story.time*1000)}} – {{story.score}} points
+  //- p.story-info(v-if="story.time") {{story.by}} – {{formatTimeAgo(story.time*1000)}} – {{story.score}} points
+  p.comment-byline
+    span.story-author 
+      a(:href="`${this.hn_url}/user?id=` + story.by") {{story.by}}
+    span.story-timeago(v-if="story.time")  – {{formatTimeAgo(story.time*1000)}}  
+    span &nbsp;– {{story.score}} points
 
   div(v-html="story.text" v-if="story.text")
 CommentList(:comments="story.kids")

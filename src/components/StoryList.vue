@@ -4,8 +4,11 @@ ul.main-stories-list
     .story-about
       h2
         a(:href="object.url" target="_blank") {{object.title}}
-      p 
-        | {{object.by}} — {{formatTimeAgo(object.time*1000)}} — {{object.score}} points 
+      p.comment-byline
+        span.story-author 
+          a(:href="`${this.hn_url}/user?id=` + object.by") {{object.by}}
+        span.story-timeago(v-if="object.time")  – {{formatTimeAgo(object.time*1000)}} 
+        span &nbsp; — {{object.score}} points
     .story-link(v-if="object.type != 'job'")
       router-link(:to="{name: 'Item', query: {id: `${object.id}`}}") 
         .story-comments-count {{object.descendants}} 
@@ -60,7 +63,5 @@ export default {
 </script>
 
 <style>
-  .loading {
-    opacity: 0.25;
-  }
+
 </style>

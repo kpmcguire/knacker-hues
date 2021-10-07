@@ -126,6 +126,12 @@ h1, h2, h3, h4, h5, h6 {
 a {
     color: var(--theme-link-color);
     display: inline-block;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+
+
+    hyphens: auto;
 
     &:link {
         color: var(--theme-link-color);
@@ -203,29 +209,19 @@ a {
     padding: calc(var(--spacing-unit) * 0.5);
     max-width: var(--page-width);
     margin-inline: auto;
-
-    @include for-medium {
-        padding: calc(var(--spacing-unit) * 1);
-    }
-    
     
     ul {
         list-style-type: none;
-        // padding-left: calc(var(--spacing-unit) * 0.25);
         margin: 0;
         
-        * + * {
-            margin-top: calc(var(--spacing-unit) * 0.5)
-        }        
-        
-        li li {
-            // padding-left: calc(var(--spacing-unit) * 0.25);
-        }
-        
-        ul {
+        p  {
             margin-top: calc(var(--spacing-unit) * 0.5);
+        }        
+               
+        ul {
+            // margin-top: calc(var(--spacing-unit) * 0.5);
             border-left: calc(var(--spacing-unit) * 0.5) solid var(--theme-highlight-color);   
-            padding-left: calc(var(--spacing-unit) * 0.45);
+            padding-left: calc(var(--spacing-unit) * 0.125);
         }
     }    
 }
@@ -271,7 +267,8 @@ a {
 }
 
 .story-info {
-    margin-block: calc(var(--spacing-unit) * 0.25)
+    margin-top: calc(var(--spacing-unit) * 0.25);
+    margin-bottom: calc(var(--spacing-unit) * 0.25)
 }
 
 .story-author {
@@ -280,6 +277,11 @@ a {
 
 .story-wrapper {
     padding-bottom: calc(var(--spacing-unit) * 0.5);
+
+    .comment-byline {
+        margin-top: calc(var(--spacing-unit) * 0.25)
+    }
+    
 }
 
 .story-title a {
@@ -296,11 +298,17 @@ a {
     border-top: calc(var(--spacing-unit) * 0.0675) solid var(--theme-border-color);
 
     .comment {
-        padding-block: 0.25rem;
+        padding: calc(var(--spacing-unit) * 0.25);
+    }
+
+    .comment-byline {
+        margin-top: 0;
+        margin-bottom: calc(var(--spacing-unit) * 0.25);
     }
 
     .comment-content {
         margin-top: 0;
+        margin-bottom: calc(var(--spacing-unit) * 0.25)
     }
 
 }
@@ -337,7 +345,8 @@ a {
 }
 
 .next-page {
-    margin-block: calc(var(--spacing-unit) * 1);
+    margin-top: calc(var(--spacing-unit) * 2);
+    margin-bottom: calc(var(--spacing-unit) * 4);
     padding: calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit) * 1);
     background-color: var(--theme-text-color);
     color: var(--theme-background-color);
@@ -345,6 +354,10 @@ a {
     border: none;
     font-weight: bold;
     cursor: pointer;
+
+    @include for-medium {
+        margin-bottom: calc(var(--spacing-unit) * 2);
+    }
 
     &:hover {
         background-color: var(--theme-text-color-secondary);
