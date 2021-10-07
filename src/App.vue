@@ -1,26 +1,111 @@
-<template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+<template lang="pug">
+.header-bar
+  .header-container
+    .header-navigation
+      a(href="#" @click="go_home") KH Home
+      router-link(to="/about") About
+      button.toggle-dark-light(@click="toggle_light_dark") 
+        span(aria-hidden="true") {{this.color_scheme_icon}}
+        span.sr-only {{this.color_scheme_label}}
+.kh-content
+  h1.sr-only Knacker Hues
+  router-view(:page_index="page_index" :total_pages="total_pages" :per_page="per_page" :current_page_story_ids="top_stories" @go_to_next_page="next_page" v-if="top_stories")
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  data() {
+    return {
+      page_index: 1,
+      per_page: 30,
+      top_stories: "",
+      is_loading: false,
+      start: 0,
+      end: 29,
+      total_pages: 16.67,
+      color_scheme: "light",
+      color_scheme_label: "Switch to dark mode",
+      color_scheme_icon: "👓"
+    }
+  },
+  methods: {
+    next_page() {
+      this.page_index++
+      this.end += this.per_page
+      this.start += this.per_page
+      this.$router.push({ path: '/', query: { p: this.page_index }})
+      window.scrollTo(0, 0);
+      this.get_top_posts()
+    },
+    async get_top_posts() {
+      this.top_stories = ""
+      let response = await fetch(`${this.hn_api_url}/topstories.json?&orderBy="$key"&startAt="${this.start}"&endAt="${this.end}"`)
+      let temp_stories = await response.json()
+      this.top_stories = Object.values(temp_stories)
+    },
+    go_home() {
+      this.end = this.per_page -1
+      this.start = 0
+      this.page_index = 1
+      this.get_top_posts()
+      this.$router.push({ path: '/', query: { p: this.page_index }})
+    },
+    toggle_light_dark() {
+      if(this.color_scheme == "dark") {
+        this.color_scheme = "light"
+      } else {
+        this.color_scheme = "dark"
+      }
+
+    }
+  },
+  created() {
+    this.get_top_posts();
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      this.color_scheme = "dark"
+    } else {
+      this.color_scheme = "light"
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      this.color_scheme = e.matches ? "dark" : "light";
+    });
+  },
+  computed: {
+    page_index_param() {
+      return this.$route.query.p ? Number(this.$route.query.p) : 1
+    },
+    indexes() {
+      return Object.keys(this.top_stories)
+    },
+
+  },
+  watch: {
+    page_index_param() {
+      this.page_index = this.page_index_param
+      this.start = this.page_index * this.per_page - this.per_page
+      this.get_top_posts();
+    },
+    color_scheme() {
+      const html_el = document.querySelector("html")
+      if(this.color_scheme == "dark") {
+        html_el.classList.add("theme-dark")
+        html_el.classList.remove("theme-light")
+        this.color_scheme_label = "Switch to light mode"
+        this.color_scheme_icon = "🕶️"
+        
+      } else {
+        html_el.classList.add("theme-light")
+        html_el.classList.remove("theme-dark")        
+        this.color_scheme_label = "Switch to dark mode" 
+        this.color_scheme_icon = "👓"
+      }
+    }
   }
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="scss">
+
 </style>
