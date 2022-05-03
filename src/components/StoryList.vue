@@ -34,7 +34,6 @@ export default {
     'page_index',
     'per_page',
     'total_pages',
-    // 'top_stories',
     'current_page_story_ids'
   ],
 
@@ -44,18 +43,9 @@ export default {
       console.log("prepare")
       Object.entries(this.current_page_story_ids).forEach(async ([key, value]) => {
         let response = await fetch(`${this.hn_api_url}/item/${value}.json`)
-        console.log(key)
         let response_json = await response.json()
-        console.log(response_json)
         this.stories[`${key}`] = response_json;
       })
-      
-      // this.current_page_story_ids.forEach(async (id)=>{
-      //   let response = await fetch(`${this.hn_api_url}/item/${id}.json`)
-      //   let response_json = await response.json()
-      //   console.log(response_json)
-      //   this.stories.push(response_json);
-      // })
     }
   },
 
@@ -74,7 +64,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

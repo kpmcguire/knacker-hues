@@ -222,6 +222,7 @@ a {
             // margin-top: calc(var(--spacing-unit) * 0.5);
             border-left: calc(var(--spacing-unit) * 0.5) solid var(--theme-highlight-color);   
             padding-left: calc(var(--spacing-unit) * 0.125);
+            // margin-left: calc(var(--spacing-unit) * 0.25);
         }
     }    
 }
@@ -279,7 +280,7 @@ a {
     padding-bottom: calc(var(--spacing-unit) * 0.5);
 
     .comment-byline {
-        margin-top: calc(var(--spacing-unit) * 0.25)
+        margin-top: calc(var(--spacing-unit) * 0.25);
     }
     
 }
@@ -298,17 +299,23 @@ a {
     border-top: calc(var(--spacing-unit) * 0.0675) solid var(--theme-border-color);
 
     .comment {
-        padding: calc(var(--spacing-unit) * 0.25);
+        padding: calc(var(--spacing-unit) * 0.25) 0;
     }
 
     .comment-byline {
         margin-top: 0;
         margin-bottom: calc(var(--spacing-unit) * 0.25);
+        line-height: 1.4;
     }
 
     .comment-content {
         margin-top: 0;
         margin-bottom: calc(var(--spacing-unit) * 0.25)
+    }
+    
+    ul .comment {
+        padding: 0 calc(var(--spacing-unit) * 0.25);
+
     }
 
 }
