@@ -20,14 +20,15 @@ export default {
     return {
       page_index: 1,
       per_page: 30,
-      top_stories: "",
+      top_stories: [],
       is_loading: false,
       start: 0,
       end: 29,
       total_pages: 16.67,
       color_scheme: "light",
       color_scheme_label: "Switch to dark mode",
-      color_scheme_icon: "👓"
+      color_scheme_icon: "👓",
+      initial_load: false
     }
   },
   methods: {
@@ -40,10 +41,15 @@ export default {
       this.get_top_posts()
     },
     async get_top_posts() {
-      this.top_stories = ""
-      let response = await fetch(`${this.hn_api_url}/topstories.json?&orderBy="$key"&startAt="${this.start}"&endAt="${this.end}"`)
-      let temp_stories = await response.json()
-      this.top_stories = Object.values(temp_stories)
+      // if (!this.initial_load) {
+        this.top_stories = {}
+        let response = await fetch(`${this.hn_api_url}/topstories.json?&orderBy="$key"&startAt="${this.start}"&endAt="${this.end}"`)
+        let temp_stories = await response.json()
+        this.top_stories = temp_stories
+                
+        // this.initial_load = true
+      // }
+
     },
     go_home() {
       this.end = this.per_page -1
@@ -91,23 +97,23 @@ export default {
     }    
 
   },
-  computed: {
-    page_index_param() {
-      return this.$route.query.p ? Number(this.$route.query.p) : 1
-    },
-    indexes() {
-      return Object.keys(this.top_stories)
-    },
-
-  },
-  watch: {
-    page_index_param() {
-      this.page_index = this.page_index_param
-      this.start = this.page_index * this.per_page - this.per_page
-      this.get_top_posts();
-    },
-
-  }
+//   computed: {
+//     page_index_param() {
+//       return this.$route.query.p ? Number(this.$route.query.p) : 1
+//     },
+//     indexes() {
+//       return Object.keys(this.top_stories)
+//     },
+// 
+//   },
+//   watch: {
+//     page_index_param() {
+//       this.page_index = this.page_index_param
+//       this.start = this.page_index * this.per_page - this.per_page
+//       this.get_top_posts();
+//     },
+// 
+//   }
 }
 </script>
 

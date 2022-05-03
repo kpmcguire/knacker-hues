@@ -26,7 +26,7 @@ export default {
   emits: ["go_to_next_page"],
   data() {
     return {
-      stories: [],
+      stories: {},
       loading: false
     }
   },
@@ -39,13 +39,23 @@ export default {
   ],
 
   methods: {
-    async prepare_story_listing() {
-      this.stories = []
-      this.current_page_story_ids.forEach(async (id)=>{
-        let response = await fetch(`${this.hn_api_url}/item/${id}.json`)
+    prepare_story_listing() {
+      this.stories = {}
+      console.log("prepare")
+      Object.entries(this.current_page_story_ids).forEach(async ([key, value]) => {
+        let response = await fetch(`${this.hn_api_url}/item/${value}.json`)
+        console.log(key)
         let response_json = await response.json()
-        this.stories.push(response_json);
+        console.log(response_json)
+        this.stories[`${key}`] = response_json;
       })
+      
+      // this.current_page_story_ids.forEach(async (id)=>{
+      //   let response = await fetch(`${this.hn_api_url}/item/${id}.json`)
+      //   let response_json = await response.json()
+      //   console.log(response_json)
+      //   this.stories.push(response_json);
+      // })
     }
   },
 
@@ -56,6 +66,9 @@ export default {
 
   watch: {
     page_index(){
+      this.prepare_story_listing()
+    },
+    current_page_story_ids() {
       this.prepare_story_listing()
     }
   }
