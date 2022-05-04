@@ -13,7 +13,7 @@ ul.main-stories-list
       router-link(:to="{name: 'Item', query: {id: `${object.id}`}}") 
         .story-comments-count {{object.descendants}} 
         .story-comments-label {{object.descendants === 1 ? 'comment' : 'comments'}} 
-button.next-page(@click="$emit('go_to_next_page')" v-if="page_index <= total_pages") Next Page
+button.next-page(@click="$emit('go_to_next_page')" v-if="Object.keys(stories).length") Next Page
 
 </template>
 
@@ -40,7 +40,6 @@ export default {
   methods: {
     prepare_story_listing() {
       this.stories = {}
-      console.log("prepare")
       Object.entries(this.current_page_story_ids).forEach(async ([key, value]) => {
         let response = await fetch(`${this.hn_api_url}/item/${value}.json`)
         let response_json = await response.json()
